@@ -9,7 +9,7 @@ bool only_digits(string s);
 
 int main(int argc, string argv[]) 
 {
-    /*if no argument on command line
+    /*if argument != 1 and not digit on command line
         print error message
         exit and return 1
     */
@@ -19,45 +19,25 @@ int main(int argc, string argv[])
         return 1;
     }
 
+    //convert first arg (key) to an int modulo 26
     int key = atoi(argv[1]) % 26;
-    //key = key % 26;
 
+    //prompt user to enter a text
     string plaintext = get_string("plaintext: ");
+
+    //call a function to cipher the text with the key
     string textciphered = ciphertext(plaintext, key);
+
     printf("ciphertext: %s\n", textciphered);
     return 0;
-
-    /*output plaintext without\n and two spaces
-    print plaintext:  
-    get_string plaintext
-    */
-    /*output ciphertext:
-    string ciphertext(plaintext)
-    print ciphertext: \n
-    return 0
-    */
 }
 
 string ciphertext(string text, int k)
 {
     /* rotate by k position any aplha
     text[i] est un char avec la valeur ascii
-    for (int i=0, n=strlen(plaintext); i< n; i++)
-    {
-        isalpha(text[i])
-            isupper(text[i])
-                if (text[i] + k > 90)
-                text[i] = text[i] - (26 - k)
-                else
-                text[i] = text[i] + k)
-            islower(text[i])
-                if (text[i] + k > 122)
-                text[i] = text[i] - (26 - k)
-                else
-                text[i] = text[i] + k)
-    }
     */
-    for (int i=0, n=strlen(text); i< n; i++)
+    for (int i = 0, n = strlen(text); i < n; i++)
     {
         char letter = text[i];
         if (isalpha(letter) && isupper(letter)) 
