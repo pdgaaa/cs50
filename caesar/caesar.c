@@ -1,23 +1,99 @@
 #include <cs50.h>
 #include <stdio.h>
+#include <string.h>
+#include <ctype.h>
+#include <stdlib.h>
+
+string ciphertext(string text, int k);
+bool only_digits(string s);
 
 int main(int argc, string argv[]) 
 {
-    //pseudocode
-    //get the key
-    /*int positive k = argv[1];
-    */
     /*if no argument on command line
         print error message
         exit and return 1
     */
-    /*if argument is not a decimal digit
-        print Usage: ./caesar key
-        exit and return 1
+    if (argc != 2 || !only_digits(argv[1]))
+    {
+        printf("Usage: ./caesar key\n");
+        return 1;
+    }
+
+    int key = atoi(argv[1]) % 26;
+    //key = key % 26;
+
+    string plaintext = get_string("plaintext: ");
+    string textciphered = ciphertext(plaintext, key);
+    printf("ciphertext: %s\n", textciphered);
+    return 0;
+
+    /*output plaintext without\n and two spaces
+    print plaintext:  
+    get_string plaintext
     */
-    /*if argument k > 26
-        key = k % 26
-        if key == 0
-            k = 26
+    /*output ciphertext:
+    string ciphertext(plaintext)
+    print ciphertext: \n
+    return 0
     */
+}
+
+string ciphertext(string text, int k)
+{
+    /* rotate by k position any aplha
+    text[i] est un char avec la valeur ascii
+    for (int i=0, n=strlen(plaintext); i< n; i++)
+    {
+        isalpha(text[i])
+            isupper(text[i])
+                if (text[i] + k > 90)
+                text[i] = text[i] - (26 - k)
+                else
+                text[i] = text[i] + k)
+            islower(text[i])
+                if (text[i] + k > 122)
+                text[i] = text[i] - (26 - k)
+                else
+                text[i] = text[i] + k)
+    }
+    */
+    for (int i=0, n=strlen(text); i< n; i++)
+    {
+        char letter = text[i];
+        if (isalpha(letter) && isupper(letter)) 
+        {
+            if (letter + k > 90)
+            {
+                text[i] = text[i] - (26 - k);
+            }
+            else
+            {
+                text[i] = text[i] + k;
+            }
+        }
+        else if (isalpha(letter) && islower(letter)) 
+        {
+            if (letter + k > 122)
+            {
+                text[i] = text[i] - (26 - k);
+            }
+            else
+            {
+                text[i] = text[i] + k;
+            }
+        }
+    }
+    return text;
+}
+
+bool only_digits(string s)
+{
+    for (int i = 0, n = strlen(s); i < n; i++)
+    {
+        if (!isdigit(s[i]))
+        {
+            return false;
+        }
+    }
+    return true;
 }
