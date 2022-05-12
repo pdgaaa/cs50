@@ -72,8 +72,12 @@ bool only_digits(string s)
     {
         if (isdigit(s[i]))
         {
-            return true;
+            continue;
+        }
+        else
+        {
+            return false;
         }
     }
-    return false;
+    return true;
 }
