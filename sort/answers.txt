@@ -1,0 +1,58 @@
+sort1 uses: BUBBLE
+
+How do you know?: fast for a sorted file, same for reversed or random
+
+sort2 uses: MERGE
+
+How do you know?: the fastest in all, compare all and find nlogn
+
+sort3 uses: SELECTED
+
+How do you know?: quite long with a sorted file so... and same time for all type of file. algo should browse the file entirely
+
+$ for i in 1 2 3 ; do for j in sorted reversed random ; do echo "time ./sort${i} ${j}50000.txt" ; time ./sort${i} ${j}50000.txt > /dev/null ; done ; done
+time ./sort1 sorted50000.txt
+
+real    0m0,042s
+user    0m0,033s
+sys     0m0,009s
+time ./sort1 reversed50000.txt
+
+real    0m25,152s
+user    0m24,958s
+sys     0m0,037s
+time ./sort1 random50000.txt
+
+real    0m31,374s
+user    0m31,216s
+sys     0m0,020s
+time ./sort2 sorted50000.txt
+
+real    0m0,064s
+user    0m0,052s
+sys     0m0,012s
+time ./sort2 reversed50000.txt
+
+real    0m0,067s
+user    0m0,056s
+sys     0m0,008s
+time ./sort2 random50000.txt
+
+real    0m0,081s
+user    0m0,072s
+sys     0m0,009s
+time ./sort3 sorted50000.txt
+
+real    0m12,327s
+user    0m12,247s
+sys     0m0,024s
+time ./sort3 reversed50000.txt
+
+real    0m12,629s
+user    0m12,579s
+sys     0m0,004s
+time ./sort3 random50000.txt
+
+real    0m12,583s
+user    0m12,383s
+sys     0m0,060s
