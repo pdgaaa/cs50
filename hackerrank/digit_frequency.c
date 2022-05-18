@@ -3,15 +3,10 @@
 #include <math.h>
 #include <stdlib.h>
 #include <ctype.h>
+#include <cs50.h>
 
 int main() {
 
-    /* Enter your code here. Read input from STDIN. Print output to STDOUT */
-    //char *s;
-    //s = malloc(1024 * sizeof(char));
-    //char *counting_array;
-    char s[1024];
-    //counting_array = malloc(1024 * sizeof(char));
     //init an array with 0
     int counting_array[1024];
     for (int i= 0; i < 1024; i++)
@@ -20,24 +15,23 @@ int main() {
     }
     
     //get input
-    scanf("%[^\n]", s);
-    //s = realloc(s, strlen(s) + 1);
+    string input = get_string("Input: ");
 
     //count digit
-    for (int i = 0, n = strlen(s); i < n; i++)
+    for (int i = 0, n = strlen(input); i < n; i++)
     {
-        if (isdigit(s[i]))
+        if (isdigit(input[i]))
         {
-            char digit = s[i];
-//            int digit = atoi(ascii_digit);
+            //input[i] is a char containing the ascii value
+            //convert ascii digit value to an int by substract the ascii value of 0
+            int digit = input[i] - '0';
+            //+1 to the value of the digit index
             counting_array[digit] += 1;
-            printf("%i\n", counting_array[digit]);
         }
-
     }
     
     //print digit frequency
-    for (int i = 0; i < 10; i++)
+    for (int i = 0; i <= 9; i++)
     {
         printf("%i ", counting_array[i]);
     }
