@@ -1,5 +1,37 @@
 from tictactoe import winner
 
+def test_nowinner_diag_backslash():
+    board=[
+        ["O","*","X"],
+        ["*","O","*"],
+        ["O","*","X"]
+    ]
+    assert winner(board) == ""
+
+def test_nowinner_diag_slash():
+    board=[
+        ["*","*","X"],
+        ["*","O","*"],
+        ["O","*","*"]
+    ]
+    assert winner(board) == ""
+
+def test_nowinner_column():
+    board=[
+        ["X","*","*"],
+        ["X","*","*"],
+        ["O","*","*"]
+    ]
+    assert winner(board) == ""
+
+def test_nowinner_line():
+    board=[
+        ["X","O","X"],
+        ["*","*","*"],
+        ["*","*","*"]
+    ]
+    assert winner(board) == ""
+
 def test_winner_line_top():
     board=[
         ["X","X","X"],

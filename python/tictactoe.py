@@ -41,52 +41,48 @@ def check_occupied(line,column):
         return True
     return False
 
+# best fonction pour check si y'a un gagnant
+def is_segment_all_equal(board, initial_line, initial_column, moveline, movecolumn):
+    segment_all_equal = True
+    line = initial_line
+    column = initial_column
+    for move in range(2):
+        if board[line][column] != board[line+moveline][column+movecolumn]:
+            segment_all_equal = False
+            break
+        line += moveline
+        column += movecolumn
+    if segment_all_equal and board[line][column] != "*":
+        return board[line][column]
+    return ""
+
 # fonction pour check si y'a un gagnant
-# pb : dans mon board initialise à *, * va être gagnant !
 def winner(board):
     #check lines
     for line in range(3):
-        line_all_equal = True
-        for column in range(2):
-            if board[line][column] != board[line][column+1]:
-                line_all_equal = False
-                break
-        if line_all_equal and board[line][column] != "*":
-            return board[line][column]
-
+        check_line = is_segment_all_equal(board, line, 0, 0, 1)
+        if check_line != "":
+            return check_line
+    
     #check column
     for column in range(3):
-        column_all_equal = True
-        for line in range(2):
-            if board[line][column] != board[line+1][column]:
-                column_all_equal = False
-                break
-        if column_all_equal and board[line][column] != "*":
-            return board[line][column]
+        check_column = is_segment_all_equal(board, 0, column, 1, 0)
+        if check_column != "":
+            return check_column
 
     #check diagonal \
-    diagonal_all_equal = True
-    for column in range(2):
-        line = column
-        if board[line][column] != board[line+1][column+1]:
-            diagonal_all_equal = False
-            break
-    if diagonal_all_equal and board[line][column] != "*":
-        return board[line][column]
-
+    check_diag_backslash = is_segment_all_equal(board, 0, 0, 1, 1)
+    if check_diag_backslash != "":
+        return check_diag_backslash
+    
     #check diagonal /
-    diagonal_all_equal = True
-    for line in range(2):
-        column = 2-line
-        if board[line][column] != board[line+1][column-1]:
-            diagonal_all_equal = False
-            break
-    if diagonal_all_equal and board[line][column] != "*":
-        return board[line][column]
+    check_diag_slash = is_segment_all_equal(board, 0, 2, 1, -1)
+    if check_diag_slash != "":
+        return check_diag_slash
 
     #no winner
     return ""
-
+    
 # fonction pour sauvegarder la partie dans un fichier
 def backup():
     return
