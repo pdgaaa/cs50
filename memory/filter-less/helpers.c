@@ -77,9 +77,9 @@ void blur(int height, int width, RGBTRIPLE image[height][width])
        {
            //init RGB to 000
            image[y][x] = (RGBTRIPLE) {.rgbtBlue = 0, .rgbtGreen = 0, .rgbtRed = 0};
-           for (int inner_y = -1; inner_y <= 1; inner_y++)
+           for (int inner_y = -2; inner_y <= 2; inner_y++)
            {
-               for (int inner_x = -1; inner_x <= 1; inner_x++)
+               for (int inner_x = -2; inner_x <= 2; inner_x++)
                {
                    int source_x = x + inner_x;
                    int source_y = y + inner_y;
@@ -87,9 +87,9 @@ void blur(int height, int width, RGBTRIPLE image[height][width])
                    {
                        continue;
                    }
-                   image[y][x].rgbtBlue += copy[source_y][source_x].rgbtBlue / 9;
-                   image[y][x].rgbtGreen += copy[source_y][source_x].rgbtGreen / 9;
-                   image[y][x].rgbtRed += copy[source_y][source_x].rgbtRed / 9;
+                   image[y][x].rgbtBlue += copy[source_y][source_x].rgbtBlue / 25;
+                   image[y][x].rgbtGreen += copy[source_y][source_x].rgbtGreen / 25;
+                   image[y][x].rgbtRed += copy[source_y][source_x].rgbtRed / 25;
                }
            }
        }
