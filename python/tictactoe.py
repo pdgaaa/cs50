@@ -1,16 +1,16 @@
 #!/usr/bin/python3
 
+#todo
+#dimension n < 10
+#dimension n - 5 gagnants
+#IA - fonction qui pour checker si on peut gagner ou si l'adversaire peut gagner
+#IA2 - prévoir 2 coups plus tard - mode arbre descendant
+
 import os
 import pickle
 
-board=[
-    ["*","*","*"],
-    ["*","*","*"],
-    ["*","*","*"]
-]
-
 def print_board(board):
-    _=os.system('clear')
+    _ = os.system('clear')
     print()
     for line in range(3):
         for column in range(3):
@@ -39,6 +39,7 @@ def check_in(positionX, positionY):
         return True
     return False
 
+#check si la case est occupee
 def check_occupied(line, column):
     if board[line][column] == "X" or board[line][column] == "O":
         print("occupied")
@@ -84,13 +85,22 @@ def winner(board):
     if check_diag_slash != "":
         return check_diag_slash
 
-    #no winner
-    return ""
+    #check board full
+    #parcourir le board a la recherche d'un *
+    #ou compter les X et O et si somme = 9
+    for line in range(3):
+        for column in range(3):
+            if board[line][column] == "*":
+                return ""
+
+    #no winner and no more "*"
+    return "tie"
     
 # fonction pour loader une partie
 def load():
-    with open('ttt.pickle', 'rb') as handle:
-        return pickle.load(handle)
+    if os.path.exists("ttt.pickle"):
+        with open('ttt.pickle', 'rb') as handle:
+            return pickle.load(handle)
 
 # fonction pour sauvegarder la partie dans un fichier
 def backup(board):
@@ -106,40 +116,64 @@ def backup(board):
             f.write(board[line][column])
     f.close()
 
-#open and read the file after the appending:
-#f = open("demofile2.txt", "r")
-#print(f.read()) 
-    #return
+def find_turn(board):
+    number_X = 0
+    number_O = 0
+    for line in range(3):
+        for column in range(3):
+            if board[line][column] == "X":
+                number_X += 1
+            elif board[line][column] == "O":
+                number_O += 1
+    if number_X % 2 != 0 or number_O != 0:
+        #return "O"
+        return 1
+    else:
+        #return "X"
+        return 0
 
 if __name__ == "__main__":
-    tour = 0
+    #load an existing game or initialyze one and print it
+    game = { "board": None, "user": 0 }
+    game["board"] = load()
+    if game["board"] == None:
+        game["board"]=[
+            ["*","*","*"],
+            ["*","*","*"],
+            ["*","*","*"]
+            ]
+        tour = 0
+
+    tour = int(find_turn(game["board"]))
+
     while True:
-        if tour > 9:
-            break
+
+        print_board(game["board"])
+
         if tour % 2 == 0:
             user = "X"
         else:
             user = "O"
-        
-        #write a function ou ameliore une pour sortir du programme quand le jeu est fini
-        #if toutes les cases sont occupées, on sort
-        #a qui c'est le tour
-
-        board = load()
-        print_board(board)
 
         #ask user to play in a box
         line, column = ask_user(user)
         while check_occupied(line, column):
             line, column = ask_user(user)
-        board[line][column] = user
+        game["board"][line][column] = user
 
-        print_board(board)
-        winner_user = winner(board)
-        if winner_user != "":
+        #check if there is a winner
+        winner_user = winner(game["board"])
+        if winner_user == "X" or winner_user == "O":
+            print_board(game["board"])
             print("winner is " + winner_user)
+            os.remove("ttt.pickle")         
             break
-        if tour == 8:
-            print("match nul")
-        backup(board)
+        elif winner_user == "tie":
+            print_board(game["board"])
+            print("tie game")
+            os.remove("ttt.pickle")         
+            break
+        
+        #backup
+        backup(game["board"])
         tour += 1
