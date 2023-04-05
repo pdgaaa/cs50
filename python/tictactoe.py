@@ -8,17 +8,18 @@
 
 import os
 import pickle
+import random
 
-def print_board(board):
+def print_board(board, size):
     _ = os.system('clear')
     print()
-    for line in range(3):
-        for column in range(3):
+    for line in range(size):
+        for column in range(size):
             if column > 0:
                 print("|", end='')
             print(board[line][column], end='')
         print()
-        if line < 2:
+        if line < size-1:
             print("-----")
     print()
 
@@ -101,6 +102,9 @@ def load():
     if os.path.exists("ttt.pickle"):
         with open('ttt.pickle', 'rb') as handle:
             return pickle.load(handle)
+    else:
+        user = random.choice(['X', 'O'])
+        return { "board": [ ["*","*","*"], ["*","*","*"], ["*","*","*"] ], "user": user }
 
 # fonction pour sauvegarder la partie dans un fichier
 def backup(board):
@@ -110,56 +114,29 @@ def backup(board):
     with open('ttt.pickle', 'wb') as handle:
         pickle.dump(board, handle, protocol=pickle.HIGHEST_PROTOCOL)
 
-    f = open("ttt.txt", "w")
-    for line in range(3):
-        for column in range(3):
-            f.write(board[line][column])
-    f.close()
-
-def find_turn(board):
-    number_X = 0
-    number_O = 0
-    for line in range(3):
-        for column in range(3):
-            if board[line][column] == "X":
-                number_X += 1
-            elif board[line][column] == "O":
-                number_O += 1
-    if number_X % 2 != 0 or number_O != 0:
-        #return "O"
-        return 1
-    else:
-        #return "X"
-        return 0
+    #f = open("ttt.txt", "w")
+    #for line in range(3):
+        #for column in range(3):
+            #f.write(board[line][column])
+    #f.close()
 
 if __name__ == "__main__":
     #load an existing game or initialyze one and print it
-    game = { "board": None, "user": 0 }
-    game["board"] = load()
-    if game["board"] == None:
-        game["board"]=[
-            ["*","*","*"],
-            ["*","*","*"],
-            ["*","*","*"]
-            ]
-        tour = 0
-
-    tour = int(find_turn(game["board"]))
+    game = { "board": None, "user": "undef" }
+    game = load()
 
     while True:
 
-        print_board(game["board"])
-
-        if tour % 2 == 0:
-            user = "X"
-        else:
-            user = "O"
+        size_board = int(input("Taille du jeu : "))
+        print_board(game["board"], size_board)
+        user = game["user"]
 
         #ask user to play in a box
         line, column = ask_user(user)
-        while check_occupied(game["board"],line, column):
+        while check_occupied(game["board"], line, column):
             line, column = ask_user(user)
         game["board"][line][column] = user
+        game["user"] = ("O" if user == "X" else "X")
 
         #check if there is a winner
         winner_user = winner(game["board"])
@@ -175,5 +152,4 @@ if __name__ == "__main__":
             break
         
         #backup
-        backup(game["board"])
-        tour += 1
+        backup(game)
