@@ -40,13 +40,13 @@ def check_in(positionX, positionY):
     return False
 
 #check si la case est occupee
-def check_occupied(line, column):
+def check_occupied(board, line, column):
     if board[line][column] == "X" or board[line][column] == "O":
         print("occupied")
         return True
     return False
 
-# best fonction pour check si y'a un gagnant
+# best fonction pour check un alignement
 def is_segment_all_equal(board, initial_line, initial_column, moveline, movecolumn):
     segment_all_equal = True
     line = initial_line
@@ -157,7 +157,7 @@ if __name__ == "__main__":
 
         #ask user to play in a box
         line, column = ask_user(user)
-        while check_occupied(line, column):
+        while check_occupied(game["board"],line, column):
             line, column = ask_user(user)
         game["board"][line][column] = user
 
