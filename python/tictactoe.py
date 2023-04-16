@@ -41,6 +41,11 @@ def ask_ia(size):
     if winner(game["board"], size) == "O":
         return line_temp, column_temp
     else:
+        #on enregistre quelque part tous les coups possibles, un autre board ? un autre objet ?
+        #on teste toutes les possibilités, si on gagne nous même ou si l'adversaire gagne
+        #on attribue une note
+        #pour faire simple 10 si on gagne, 0 si rien
+        #
         #on remet * dans le board
         #on recommence avec un autre random
         #ou bien on test toutes les possibilités et si rien ne gagne, on renvoie
