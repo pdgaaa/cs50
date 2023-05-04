@@ -44,30 +44,20 @@ def ask_ia(game):
     #jouer dans un copie du board ?
     for line, column in free_box:
        #faudrait tester X et O, si X winner jouer à cette place
-       game.board[line][column] = "O"
-       if winner(game) == "O":
-            #attribuer un score à cette position, où ?
-            #print("O va gagner, je joue à cette place")
-            #temp = input("pause")
-            game.board[line][column] = "*"
-            return line, column
-       else:
-            #attribuer 0
-            game.board[line][column] = "*"
+       for player in "OX":
+        game.board[line][column] = player
+        #print(line, column, game.board[line][column])
+        #temp = input("pause")
+        if winner(game) == player:
+                #attribuer un score à cette position, où ?
+                #print("O va gagner, je joue à cette place")
+                #temp = input("pausewinner")
+                game.board[line][column] = "*"
+                return line, column
+        else:
+                #attribuer 0
+                game.board[line][column] = "*"
 
-    #on teste l'autre joueur
-    for line, column in free_box:
-       #faudrait tester X et O, si X winner jouer à cette place
-       game.board[line][column] = "X"
-       if winner(game) == "X":
-            #attribuer un score à cette position, où ?
-            #print("X va gagner, je joue à cette place")
-            #temp = input("pause")
-            game.board[line][column] = "*"
-            return line, column
-       else:
-            #attribuer 0
-            game.board[line][column] = "*"
 
     #line_temp, column_temp = random.randrange(game.size), random.randrange(game.size)
     #while(check_occupied(game, line_temp, column_temp)):
@@ -90,8 +80,8 @@ def ask_user(game):
     if ia and user == "O":
         line, column = ask_ia(game)
     else:
-        #line, column = ask_ia(game)
-        line, column = input(user + " line column ? ").split()
+        line, column = ask_ia(game)
+        #line, column = input(user + " line column ? ").split()
 
     while check_in(int(line), int(column), game):
         if ia and user == "O":
