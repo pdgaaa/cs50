@@ -19,11 +19,11 @@ def print_board(game):
     for line in range(game.size):
         for column in range(game.size):
             if column > 0:
-                print("|", end='')
+                print(" ", end='')
             print(game.board[line][column], end='')
         print()
-        if line < game.size-1:
-            print(game.size*"--")
+        #if line < game.size-1:
+            #print(game.size*"--")
     print()
 
 #IA - fonction pour checker si on peut gagner ou si l'adversaire peut gagner
@@ -33,43 +33,65 @@ def ask_ia(game):
     #chaque possibilité check_winner mais sans modifier le board
     #random line and column
     #test avec is_segment_all_equal si on gagne
+    free_box = []
+    for line in range(game.size):
+        for column in range(game.size):
+            if game.board[line][column] == "*":
+                #on est dans une case libre
+                #on enregistre cette position qq part
+                free_box.append([line, column])
+ 
+    #jouer dans un copie du board ?
+    for line, column in free_box:
+       #faudrait tester X et O, si X winner jouer à cette place
+       game.board[line][column] = "O"
+       if winner(game) == "O":
+            #attribuer un score à cette position, où ?
+            #print("O va gagner, je joue à cette place")
+            #temp = input("pause")
+            game.board[line][column] = "*"
+            return line, column
+       else:
+            #attribuer 0
+            game.board[line][column] = "*"
 
-    line_temp, column_temp = random.randrange(game.size), random.randrange(game.size)
-    while(check_occupied(game, line_temp, column_temp)):
-        line_temp, column_temp = random.randrange(game.size), random.randrange(game.size)
+    #on teste l'autre joueur
+    for line, column in free_box:
+       #faudrait tester X et O, si X winner jouer à cette place
+       game.board[line][column] = "X"
+       if winner(game) == "X":
+            #attribuer un score à cette position, où ?
+            #print("X va gagner, je joue à cette place")
+            #temp = input("pause")
+            game.board[line][column] = "*"
+            return line, column
+       else:
+            #attribuer 0
+            game.board[line][column] = "*"
 
-<<<<<<< HEAD
-    game["board"][line_temp][column_temp] = "O"
-    if winner(game["board"], size) == "O":
-        return line_temp, column_temp
-    else:
-        #on enregistre quelque part tous les coups possibles, un autre board ? un autre objet ?
+    #line_temp, column_temp = random.randrange(game.size), random.randrange(game.size)
+    #while(check_occupied(game, line_temp, column_temp)):
+        #line_temp, column_temp = random.randrange(game.size), random.randrange(game.size)
+
         #on teste toutes les possibilités, si on gagne nous même ou si l'adversaire gagne
         #on attribue une note
         #pour faire simple 10 si on gagne, 0 si rien
         #
-=======
-    #game.board[line_temp][column_temp] = "O"
-    #if winner(game["board"], size) == "O":
-        #return line_temp, column_temp
-    #else:
->>>>>>> 5defc0a (introduce game as object and refactor)
-        #on remet * dans le board
-        #on recommence avec un autre random
         #ou bien on test toutes les possibilités et si rien ne gagne, on renvoie
         #un random
         #ca va boucler si on gagne pas, faudra un compteur de possibilités
         #FAUT TESTER TOUT, 1 par 1
 
     #return random.randrange(size), random.randrange(size)
-    return line_temp, column_temp
+    #return line_temp, column_temp
+    return random.choice(free_box)
 
 def ask_user(game):
     if ia and user == "O":
         line, column = ask_ia(game)
     else:
-        #line, column = ask_ia(size)
-        line, column = input(user + " line column ?").split()
+        #line, column = ask_ia(game)
+        line, column = input(user + " line column ? ").split()
 
     while check_in(int(line), int(column), game):
         if ia and user == "O":
@@ -92,6 +114,7 @@ def check_in(positionX, positionY, game):
 def check_occupied(game, line, column):
     if game.board[line][column] == "X" or game.board[line][column] == "O":
         print("occupied" + str(line) + str(column))
+        temp = input("pause")
         return True
     return False
 
