@@ -22,59 +22,33 @@ def print_board(game):
                 print(" ", end='')
             print(game.board[line][column], end='')
         print()
-        #if line < game.size-1:
-            #print(game.size*"--")
     print()
 
 #IA - fonction pour checker si on peut gagner ou si l'adversaire peut gagner
+#mettre free_box (free square) dans l'objet puis le mettre à jour au fur et à mesure
+#et le mettre dans une fonction à part
 def ask_ia(game):
-    #todo
-    #tester toutes les possibilités de jeu (toutes les cases libres) et pour
-    #chaque possibilité check_winner mais sans modifier le board
-    #random line and column
-    #test avec is_segment_all_equal si on gagne
-    free_box = []
-    for line in range(game.size):
-        for column in range(game.size):
-            if game.board[line][column] == "*":
-                #on est dans une case libre
-                #on enregistre cette position qq part
-                free_box.append([line, column])
- 
     #jouer dans un copie du board ?
-    for line, column in free_box:
-       #faudrait tester X et O, si X winner jouer à cette place
+    for line, column in game.free_squares():
        for player in "OX":
         game.board[line][column] = player
-        #print(line, column, game.board[line][column])
-        #temp = input("pause")
         if winner(game) == player:
                 #attribuer un score à cette position, où ?
                 #print("O va gagner, je joue à cette place")
                 #temp = input("pausewinner")
+                score = 10
                 game.board[line][column] = "*"
                 return line, column
+        #regarde -1 +1 dans tous les sens
         else:
                 #attribuer 0
+                #continuer à chercher un bon emplacement, comment ?
+                #jouer autour d'un de ses pions
+                #jouer sur une ligne deja bien avancée
+                score = 0
                 game.board[line][column] = "*"
 
-
-    #line_temp, column_temp = random.randrange(game.size), random.randrange(game.size)
-    #while(check_occupied(game, line_temp, column_temp)):
-        #line_temp, column_temp = random.randrange(game.size), random.randrange(game.size)
-
-        #on teste toutes les possibilités, si on gagne nous même ou si l'adversaire gagne
-        #on attribue une note
-        #pour faire simple 10 si on gagne, 0 si rien
-        #
-        #ou bien on test toutes les possibilités et si rien ne gagne, on renvoie
-        #un random
-        #ca va boucler si on gagne pas, faudra un compteur de possibilités
-        #FAUT TESTER TOUT, 1 par 1
-
-    #return random.randrange(size), random.randrange(size)
-    #return line_temp, column_temp
-    return random.choice(free_box)
+    return random.choice(game.free_squares())
 
 def ask_user(game):
     if ia and user == "O":
@@ -177,6 +151,16 @@ def backup(game):
         pickle.dump(game, handle, protocol=pickle.HIGHEST_PROTOCOL)
 
 class Game:
+    def free_squares(self):
+        free_squares = []
+        for line in range(game.size):
+            for column in range(game.size):
+                if game.board[line][column] == "*":
+                    #on est dans une case libre
+                    #on enregistre cette position dans la liste
+                    free_squares.append([line, column])
+        return free_squares
+
     def __init__(self, board, user, size, ia):
         self.board = board
         self.user = user
@@ -216,11 +200,13 @@ if __name__ == "__main__":
         if winner_user == "X" or winner_user == "O":
             print_board(game)
             print("winner is " + winner_user)
+            print()
             os.remove("ttt.pickle")         
             break
         elif winner_user == "tie":
             print_board(game)
             print("tie game")
+            print()
             os.remove("ttt.pickle")         
             break
         
